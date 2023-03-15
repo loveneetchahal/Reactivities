@@ -5,9 +5,11 @@
 
 appsettings.json
 .idea/
+.vscode/
 reactivities.db-shm
 reactivities.db-wal
 .gitignore
+
 
 # User-specific files
 *.rsuser
