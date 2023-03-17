@@ -1,17 +1,13 @@
 import React, {ChangeEvent, useState} from 'react';
 import {Button, Form, Segment} from "semantic-ui-react";
-import {Activity} from "../../../app/models/activity";
 import {useStore} from "../../../app/stores/store";
+import {observer} from "mobx-react-lite";
 
-interface Props {
-    handleCreateOrEditActivity: (activity: Activity) => void;
-    submitting: boolean
-}
 
-const ActivityForm = ({submitting, handleCreateOrEditActivity, }: Props) => {
+const ActivityForm = () => {
 
     const {activityStore} = useStore();
-    const {selectedActivity, toggleForm} = activityStore;
+    const {selectedActivity, toggleForm, createActivity, updateActivity, loading} = activityStore;
 
     const initialState = selectedActivity ?? {
         id: '',
@@ -26,7 +22,7 @@ const ActivityForm = ({submitting, handleCreateOrEditActivity, }: Props) => {
     const [activity, setActivity] = useState(initialState);
 
     const handleSubmit = () => {
-        handleCreateOrEditActivity(activity);
+        activity.id ? updateActivity(activity) : createActivity(activity);
     }
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -46,11 +42,11 @@ const ActivityForm = ({submitting, handleCreateOrEditActivity, }: Props) => {
                             onChange={handleInputChange}/>
                 <Form.Input placeholder={'City'} value={activity.city} name='city' onChange={handleInputChange}/>
                 <Form.Input placeholder={'Venue'} value={activity.venue} name='venue' onChange={handleInputChange}/>
-                <Button loading={submitting} floated={"right"} positive type={"submit"} content={'Submit'}/>
+                <Button loading={loading} floated={"right"} positive type={"submit"} content={'Submit'}/>
                 <Button onClick={() => toggleForm(activity?.id)} floated={"right"} type={"button"}
                         content={'Cancel'}/>
             </Form>
         </Segment>)
 };
 
-export default ActivityForm;
+export default observer(ActivityForm);
