@@ -1,10 +1,10 @@
 import React from "react";
 import { Button, Container, Menu } from "semantic-ui-react";
+import {useStore} from "../stores/store";
 
-interface Props{
-  toggleEditMode: () => void;
-}
-const NavBar = ({toggleEditMode}: Props) => {
+
+const NavBar = () => {
+  const {activityStore} = useStore();
   return (
     <Menu inverted fixed="top">
       <Container>
@@ -14,7 +14,7 @@ const NavBar = ({toggleEditMode}: Props) => {
         </Menu.Item>
         <Menu.Item name="Activities" />
         <Menu.Item>
-          <Button onClick={() => toggleEditMode()} positive content="Create Activity"/>
+          <Button onClick={() => activityStore.toggleForm()} positive content="Create Activity"/>
         </Menu.Item>
       </Container>
     </Menu>

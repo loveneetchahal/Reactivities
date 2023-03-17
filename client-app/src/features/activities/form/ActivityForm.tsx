@@ -1,15 +1,17 @@
 import React, {ChangeEvent, useState} from 'react';
 import {Button, Form, Segment} from "semantic-ui-react";
 import {Activity} from "../../../app/models/activity";
+import {useStore} from "../../../app/stores/store";
 
 interface Props {
-    toggleEditMode: (id?: string | null) => void;
-    activity: Activity | undefined;
     handleCreateOrEditActivity: (activity: Activity) => void;
     submitting: boolean
 }
 
-const ActivityForm = ({submitting, handleCreateOrEditActivity, activity: selectedActivity, toggleEditMode}: Props) => {
+const ActivityForm = ({submitting, handleCreateOrEditActivity, }: Props) => {
+
+    const {activityStore} = useStore();
+    const {selectedActivity, toggleForm} = activityStore;
 
     const initialState = selectedActivity ?? {
         id: '',
@@ -45,7 +47,7 @@ const ActivityForm = ({submitting, handleCreateOrEditActivity, activity: selecte
                 <Form.Input placeholder={'City'} value={activity.city} name='city' onChange={handleInputChange}/>
                 <Form.Input placeholder={'Venue'} value={activity.venue} name='venue' onChange={handleInputChange}/>
                 <Button loading={submitting} floated={"right"} positive type={"submit"} content={'Submit'}/>
-                <Button onClick={() => toggleEditMode(activity?.id)} floated={"right"} type={"button"}
+                <Button onClick={() => toggleForm(activity?.id)} floated={"right"} type={"button"}
                         content={'Cancel'}/>
             </Form>
         </Segment>)

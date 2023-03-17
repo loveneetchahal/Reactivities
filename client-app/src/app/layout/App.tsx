@@ -6,6 +6,8 @@ import ActivityDashboard from "../../features/activities/dashboard/ActivityDashb
 import {v4 as uuid} from 'uuid';
 import agent from "../api/agent";
 import LoadingComponent from "./LoadingComponent";
+import {observer} from "mobx-react-lite";
+import {useStore} from "../stores/store";
 
 function App() {
     const [activities, setActivities] = useState<Activity[]>([]);
@@ -14,29 +16,12 @@ function App() {
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
 
+    const {activityStore} = useStore();
+
     useEffect(() => {
-        agent.Activities.list()
-            .then((response) => {
-                response.forEach(activity => {
-                    activity.date = activity.date.split('T')[0];
-                })
-                setActivities(response);
-                setLoading(false);
-            });
-    }, []);
+        activityStore.loadActivities();
+    }, [activityStore]);
 
-    const handleSelectActivity = (id: string) => {
-        setEditMode(false);
-        setSelectedActivity(activities.find(x => x.id === id));
-    }
-    const handleCancelSelectActivity = () => {
-        setSelectedActivity(undefined);
-    }
-
-    const toggleEditMode = (id?: string) => {
-        id ? handleSelectActivity(id) : handleCancelSelectActivity();
-        setEditMode(!EditMode);
-    }
 
     const handleCreateOrEditActivity = (activity: Activity) => {
         setSubmitting(true);
@@ -76,15 +61,12 @@ function App() {
             setSubmitting(false);
         });
     }
-    if (loading) return <LoadingComponent content={'Loading app...'}/>
+    if (activityStore.loadingInitial) return <LoadingComponent content={'Loading app...'}/>
     return (
         <>
-            <NavBar toggleEditMode={toggleEditMode}/>
+            <NavBar/>
             <Container style={{marginTop: "7em"}}>
-                <ActivityDashboard deleteActivity={handleDeleteActivity} toggleEditMode={toggleEditMode}
-                                   editMode={EditMode} activities={activities} selectedActivity={selectedActivity}
-                                   selectActivity={handleSelectActivity}
-                                   cancelSelectActivity={handleCancelSelectActivity}
+                <ActivityDashboard deleteActivity={handleDeleteActivity}
                                    handleCreateOrEditActivity={handleCreateOrEditActivity}
                                    submitting={submitting}/>
             </Container>
@@ -92,4 +74,4 @@ function App() {
     );
 }
 
-export default App;
+export default observer(App);
