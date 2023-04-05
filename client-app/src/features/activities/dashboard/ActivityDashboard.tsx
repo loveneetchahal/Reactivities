@@ -6,15 +6,13 @@ import {observer} from "mobx-react-lite";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import ActivityFilters from "./ActivityFilters";
 import { router } from "../../../app/router/Routes";
-import { toast } from "react-toastify";
 
 
 const ActivityDashboard = () => {
     const {activityStore, commonStore, userStore} = useStore();
     const {isLoggedIn} = userStore;
     const {loadActivities, activityRegistry} = activityStore;
-
-    useEffect(() => {
+    useEffect(() =>{ 
         if(activityRegistry.size <= 1){
              void loadActivities();
         }
@@ -22,7 +20,7 @@ const ActivityDashboard = () => {
         if(!isLoggedIn) {
             router.navigate('/login');
         }
-    }, [activityRegistry, commonStore, loadActivities]);
+    }, [isLoggedIn, activityRegistry, commonStore, loadActivities]);
 
     if (activityStore.loadingInitial) return <LoadingComponent content={'Loading app...'}/>
     return (

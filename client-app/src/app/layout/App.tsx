@@ -16,8 +16,8 @@ function App() {
 
     useEffect(() => {
         if(commonStore.token) {
-            userStore.getUser(commonStore.token).then((value) => console.log(value)
-            ).finally(() => {
+            userStore.getUser(commonStore.token)
+            .finally(() => {
                 commonStore.setAppLoaded();
             })
         } else {
