@@ -65,7 +65,7 @@ public class AccountController : ControllerBase
 
         return BadRequest(result.Errors);
     }
-    
+
     [HttpGet]
     public async Task<ActionResult<UserDto>> GetCurrentUser()
     {
