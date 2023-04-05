@@ -20,7 +20,6 @@ export default class userStore {
       const user = await agent.Account.login(creds);
       store.commonStore.setToken(user.token);
       runInAction(() => (this.user = user));
-      console.log(store.commonStore.token);
       
       router.navigate('/activities');
     } catch (error) {
@@ -39,7 +38,6 @@ export default class userStore {
       const user = await agent.Account.current();
       runInAction(() => (this.user = user));
     } catch (error) {
-      console.log(error);
     }
   };
 }

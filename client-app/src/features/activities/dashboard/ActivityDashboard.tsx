@@ -10,16 +10,16 @@ import { toast } from "react-toastify";
 
 
 const ActivityDashboard = () => {
-    const {activityStore, commonStore} = useStore();
+    const {activityStore, commonStore, userStore} = useStore();
+    const {isLoggedIn} = userStore;
     const {loadActivities, activityRegistry} = activityStore;
 
     useEffect(() => {
-        if(activityRegistry.size <= 1 && commonStore.token !== null){
+        if(activityRegistry.size <= 1){
              void loadActivities();
-        } else {
-            console.log(activityRegistry);
-            
-            toast.error("You're not signed in")
+        }
+
+        if(!isLoggedIn) {
             router.navigate('/login');
         }
     }, [activityRegistry, commonStore, loadActivities]);

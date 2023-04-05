@@ -9,7 +9,6 @@ const HomePage = () => {
   useEffect(() => {
     if(!userStore.user && !!localStorage.getItem('jwt')){
         commonStore.setToken(localStorage.getItem('jwt'));
-        console.log("AAAA");
     }
   }, [userStore, commonStore])
   
