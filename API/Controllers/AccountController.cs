@@ -55,6 +55,7 @@ public class AccountController : ControllerBase
             Email = registerDto.Email,
             UserName = registerDto.UserName
         };
+        
 
         var result = await _userManager.CreateAsync(user, registerDto.Password);
 

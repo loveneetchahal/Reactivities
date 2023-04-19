@@ -6,6 +6,7 @@ interface Props {
   placeholder: string;
   name: string;
   label?: string;
+  type?: string;
 }
 
 const MyTextInput = (props: Props) => {
@@ -16,8 +17,10 @@ const MyTextInput = (props: Props) => {
       <label htmlFor=''>{props.label}</label>
       <input {...field} {...props} />
       {meta.touched && meta.error ? (
-        <Label basic color={'red'}>{meta.error}</Label>
-      ): null}
+        <Label basic color={'red'}>
+          {meta.error}
+        </Label>
+      ) : null}
     </Form.Field>
   );
 };
