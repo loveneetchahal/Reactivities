@@ -1,9 +1,11 @@
+import { User, UserFormValues } from './../models/user';
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Activity } from "../models/activity";
 import { toast } from "react-toastify";
 import { router } from "../router/Routes";
 import { store } from "../stores/store";
 import { User, UserFormValues } from "../models/user";
+import { request } from 'http';
 
 const sleep = (delay: number) => {
   return new Promise((resolve) => {
@@ -59,7 +61,6 @@ axios.interceptors.response.use(
 );
 
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
-
 const requests = {
   get: <T>(url: string) => axios.get<T>(url).then(responseBody),
   post: <T>(url: string, body: {}) =>
@@ -81,11 +82,11 @@ const Account = {
   current: () => requests.get<User>('/account'),
   login: (user: UserFormValues) => requests.post<User>('/account/login', user),
   register: (user: UserFormValues) => requests.post<User>('/account/register', user)
-};
+}
 
 const agent = {
   Activities,
-  Account
+  Account 
 };
 
 export default agent;
