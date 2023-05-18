@@ -4,6 +4,7 @@ import { Activity } from "../models/activity";
 import { toast } from "react-toastify";
 import { router } from "../router/Routes";
 import { store } from "../stores/store";
+import { User, UserFormValues } from "../models/user";
 import { request } from 'http';
 
 const sleep = (delay: number) => {
@@ -13,13 +14,20 @@ const sleep = (delay: number) => {
 };
 
 axios.defaults.baseURL = "http://localhost:5000/api";
+
+axios.interceptors.request.use(config => {
+  const token = store.commonStore.token;
+  if(token && config.headers) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+})
+
 axios.interceptors.response.use(
   async (response) => {
     await sleep(1000);
     return response;
   },
   (error: AxiosError) => {
-    console.log(error);
+
     const { data, status, config } = error.response as AxiosResponse;
     switch (status) {
       case 400:

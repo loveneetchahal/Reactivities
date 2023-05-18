@@ -5,15 +5,22 @@ import {useStore} from "../../../app/stores/store";
 import {observer} from "mobx-react-lite";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import ActivityFilters from "./ActivityFilters";
+import { router } from "../../../app/router/Routes";
 
 
 const ActivityDashboard = () => {
-    const {activityStore} = useStore();
+    const {activityStore, commonStore, userStore} = useStore();
+    const {isLoggedIn} = userStore;
     const {loadActivities, activityRegistry} = activityStore;
+    useEffect(() =>{ 
+        if(activityRegistry.size <= 1){
+             void loadActivities();
+        }
 
-    useEffect(() => {
-        if(activityRegistry.size <= 1) void loadActivities();
-    }, [activityStore,activityRegistry.size, loadActivities]);
+        if(!isLoggedIn) {
+            router.navigate('/login');
+        }
+    }, [isLoggedIn, activityRegistry, commonStore, loadActivities]);
 
     if (activityStore.loadingInitial) return <LoadingComponent content={'Loading app...'}/>
     return (
